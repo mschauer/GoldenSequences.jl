@@ -1,0 +1,4 @@
+name = "GoldenSequences"
+uuid = "e13314f6-e9b3-11e9-0763-f13dff015e8a"
+authors = ["mschauer <moritzschauer@web.de>"]
+version = "0.1.0"
