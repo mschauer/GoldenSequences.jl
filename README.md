@@ -1,6 +1,6 @@
 # GoldenSequences.jl
 Generalized golden sequences, a form of low discrepancy sequence or quasi random numbers
-See [Martin Roberts: The Unreasonable Effectiveness 
+See [Martin Roberts: The Unreasonable Effectiveness
 of Quasirandom Sequences](http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/) for background.
 
 Golden sequence
@@ -35,6 +35,14 @@ julia> collect(take(GoldenSequence(0.0), 10))
  0.5623058987490541
 ```
 
+Random colors: Low discrepancy series are good choice for (quasi-) random colors
+```
+using Colors
+n = 20
+c = map(x->RGB(x...), (take(GoldenSequence(3), n))) # perfect for random colors
+```
+
+
 2D golden sequence
 ==================
 
@@ -64,4 +72,19 @@ Interface
 GoldenSequence(n::Int) # Float64 n-dimensional golden sequence
 GoldenSequence(x0::Number) # 1-d golden sequence shifted by `x0`
 GoldenSequence(x0) # length(x)-d golden sequence shifted/starting in 'x0'
+```
+
+
+A flower
+========
+Flower petals grow in spots not covering older petals, the new spot is at an angle given by the golden sequence.
+
+```
+using Colors
+using Makie
+n = 20
+c = map(x->RGB(x...), (take(GoldenSequence(3), n))) # perfect for random colors
+x = collect(take(GoldenSequence(0.0), n))
+petals = [(i*cos(2pi*x), i*sin(2pi*x)) for (i,x) in  enumerate(x)]
+scatter(reverse(petals), color=c, markersize=10*(n:-1:1))
 ```
