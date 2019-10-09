@@ -3,6 +3,16 @@ Generalized golden sequences, a form of low discrepancy sequence or quasi random
 See [Martin Roberts: The Unreasonable Effectiveness
 of Quasirandom Sequences](http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/) for background.
 
+The `d`-dimensional sequence follows
+```
+x[i] = x[i-1] .+ z .% true, x[0] = x0
+```
+where
+```
+z = [ϕ[k]^(-i) for i in 1:d]
+```
+and `ϕ[k]` solves `ϕ[k]^(d+1) = ϕ[k] + 1` (with `ϕ[1]` the golden mean.)
+
 Golden sequence
 ===============
 ```
