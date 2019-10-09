@@ -41,7 +41,7 @@ using Colors
 n = 20
 c = map(x->RGB(x...), (take(GoldenSequence(3), n))) # perfect for random colors
 ```
-
+![Colors](https://raw.githubusercontent.com/mschauer/GoldenSequences.jl/master/randomcolors.png)
 
 2D golden sequence
 ==================
@@ -88,3 +88,6 @@ x = collect(take(GoldenSequence(0.0), n))
 petals = [(i*cos(2pi*x), i*sin(2pi*x)) for (i,x) in  enumerate(x)]
 scatter(reverse(petals), color=c, markersize=10*(n:-1:1))
 ```
+
+![Flower petals](https://raw.githubusercontent.com/mschauer/GoldenSequences.jl/master/flower.png)
+
