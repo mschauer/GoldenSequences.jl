@@ -1,5 +1,7 @@
 # GoldenSequences.jl
 Generalized golden sequences, a form of low discrepancy sequence or quasi random numbers
+See [Martin Roberts: The Unreasonable Effectiveness 
+of Quasirandom Sequences](http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/) for background.
 
 Golden sequence
 ===============
@@ -52,6 +54,8 @@ y = [(rand(),rand()) for i in 1:n]
 p2 = scatter(y, markersize=0.02, color=:red)
 vbox(p1, p2)
 ```
+
+![Quasi-random vs. random](https://raw.githubusercontent.com/mschauer/GoldenSequences.jl/master/quasivsrandom.png)
 
 Interface
 =========
