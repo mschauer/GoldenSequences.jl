@@ -4,7 +4,7 @@ using FixedPointNumbers
 using Roots
 using Base.Iterators
 using Base.MathConstants
-export GoldenIntSequence, GoldenSequence
+export GoldenIntSequence, GoldenSequence, GoldenCartesianSequence
 
 """
 	nextodd(x)
@@ -15,6 +15,20 @@ nextodd(i::Integer) = i >> 1 << 1 + one(i)
 nextodd(z::T) where {T<:Normed} = reinterpret(T, nextodd(z.i))
 prevodd(i::Integer) = i >> 1 << 1 - one(i)
 prevodd(z::T) where {T<:Normed} = reinterpret(T, prevodd(z.i))
+
+"""
+    closecoprime(r, q)
+
+Find number coprime to `q` close to `r`.
+"""
+function closecoprime(r, q)
+	i = zero(r)
+	while true
+		gcd(r + i, q) == 1 && return r + i
+		gcd(r - i, q) == 1 && return r - i
+	    i += 1
+	end # ends at r == 1 or r == q
+end
 
 struct GoldenSequence{T}
 	x0::T
@@ -35,15 +49,33 @@ Iterators.IteratorSize(::GoldenIntSequence) = Iterators.IsInfinite()
 f(x, d) = x^(d+1) - (x + one(x))
 
 """
+GoldenCartesianSequence(dims...)
+
+Golden Cartesian sequence on `CartesianIndices(dims)`.
+Iterates `CartesianIndex`.
+Spacefilling with  period `prod(dims...)`
+if `dims` are coprime.
+
+"""
+struct GoldenCartesianSequence{T,S}
+	coeff::T
+	R::CartesianIndices{S}
+end
+Iterators.eltype(::Type{GoldenCartesianSequence{T}}) where {T} = T
+Iterators.IteratorSize(::GoldenCartesianSequence) = Iterators.IsInfinite()
+
+
+"""
 Compute or look up solution to x^(d+1) = x + 1
 """
-function Phi(_, d)
+function Phi(d)
 	if d <= length(phis)
 		phis[d]
 	else
 		find_zero(x->f(x, d), (1.0, 2.0))
 	end
 end
+Phi(_, d) = Phi(d)
 
 function GoldenSequence(x0)
 	phi = Phi(eltype(T), n)
@@ -63,7 +95,7 @@ GoldenSequence(n::Int) = GoldenSequence(ntuple(n) do i; 0.0 end)
 GoldenSequence(T, n) = GoldenSequence(ntuple(n) do i; zero(T) end)
 
 function GoldenSequence(x0::T) where {T <: Number}
-	GoldenSequence{T}(x0, convert(T, golden))
+	GoldenSequence{T}(x0, convert(T, 1/golden))
 end
 
 function GoldenSequence(::Type{T}, n) where {T<:Normed}
@@ -78,11 +110,20 @@ end
 function GoldenIntSequence(::Type{T}, n) where {T<:Unsigned}
 	phi = Phi(T, n)
 	t = ntuple(n) do i
-	       (round(T, (typemax(T)+1)*phi^(-i)))
+	       (round(T, (typemax(T)+1.0)*phi^(-i)))
 	end
 	GoldenIntSequence{typeof(t)}(t)
 end
 
+GoldenCartesianSequence(R) = GoldenCartesianSequence(CartesianIndices(R))
+function GoldenCartesianSequence(R::CartesianIndices)
+	n = ndims(R)
+	phi = Phi(n)
+	t = ntuple(n) do i
+	    	closecoprime(round(Int, size(R, i)*phi^(-i)), size(R, i))
+	end
+	GoldenCartesianSequence(t, R)
+end
 
 function Base.getindex(g::GoldenSequence{<:Tuple}, ind)
     ntuple(length(g.coeff)) do i
@@ -101,6 +142,12 @@ function Base.iterate(g::GoldenIntSequence, val=g.x0)
 	 state = g.coeff .+ val # intentional overflow
 	 val, state
 end
+
+function Base.iterate(g::GoldenCartesianSequence, val=g.R[1])
+	state = mod.(g.coeff .+ Tuple(val), g.R.indices)
+	val, typeof(val)(state)
+end
+
 
 const phis = [
 1.618033988749895 # MathConstants.golden
