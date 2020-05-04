@@ -81,11 +81,11 @@ Cartesian Golden Sequence
 With a bit of effort, one can use Golden Sequences to generate spacefilling quasirandom sequences of cartesian indices.
 For example `GoldenCartesianSequence((m, n))` will create a 2D Cartesian sequence corresponding to (approximate) samples of the Golden sequence in `1:m` x `1:n`. If `m, n` are coprime, the sequence will be space filling, that is `sort(collect(take(GoldenCartesianSequence((m, n)), m*n))) == CartesianIndices((m, n))[:]`.
 
-If additional there are integers `a, b` such that `a/m ≈ ϕ[2]^(-1)`, ` `b/n ≈ ϕ[2]^(-2)` etc., then the indices will be well distributed, for example if `m, n = 2819, 3508`:
+If additional there are integers `a, b` such that `a/m ≈ ϕ[2]^(-1)`, `b/n ≈ ϕ[2]^(-2)` etc., then the indices will be well distributed, for example if `m, n = 2819, 3508`:
 
 ![Quasi-random cartesian indices](https://raw.githubusercontent.com/mschauer/GoldenSequences.jl/master/cartesian2.png)
 
-The image shows the first 0.00005 (red) and the first 0.002 indices (black) in the `GoldenCartesianSequence((2819, 3508))`.
+The image shows the fraction of the first 0.00005 (red) and the first 0.002 indices (black) in the `GoldenCartesianSequence((2819, 3508))`.
 
 
 Interface
