@@ -14,14 +14,14 @@ m, n = @. denominator(rationalize(GoldenSequences.phis[2]^(-[1, 2]), tol=0.00000
 @assert gcd(m, n) == 1
 a = img(m, n)
 
-heatmap( -a[1:200, 1:200] )
-save("cartesian1.png")
+pl = heatmap( -a[1:200, 1:200] )
+save("cartesian1.png", pl)
 
 pt(c) = Point2f0(c[1], c[2])
 
 
-scatter(pt.(take(GoldenCartesianSequence((m, n)), 20*20)), color=:red, markersize=20.0)
-scatter!(pt.(take(GoldenCartesianSequence((m, n)), m*n ÷ 525)), markersize=7.0)
+pl = scatter(pt.(take(GoldenCartesianSequence((m, n)), 20*20)), color=:red, markersize=20.0)
+scatter!(pl, pt.(take(GoldenCartesianSequence((m, n)), m*n ÷ 525)), markersize=7.0)
 #scatter!(pt.(take(GoldenCartesianSequence((m, n)), m*n ÷ 2)), grid=false, markersize=1.0)
 
-save("cartesian2.png")
+save("cartesian2.png", pl)
