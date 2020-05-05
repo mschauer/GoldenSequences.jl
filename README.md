@@ -93,7 +93,7 @@ For example if `m = (2819, 3508)`:
 
 The image shows the fraction of the first 0.00005 (red) and the first 0.002 indices (black) in the `GoldenCartesianSequence((2819, 3508))`.
 
-In short, good `m` are denominators of fractions given by the function `rationalize`
+In short, good `m` are coprime denominators of fractions given by the function `rationalize`
 
 ```julia
 d = 2
@@ -101,10 +101,16 @@ m = @. denominator(rationalize(GoldenSequences.phis[d]^(-(1:d)), tol=0.0000001))
 ```
 
 ```
+julia> m
 2-element Array{Int64,1}:
  2819
  3508
+
+julia> gcd(m[1], m[2])
+1
 ```
+
+
 
 Interface
 =========
