@@ -79,14 +79,32 @@ Cartesian Golden Sequence
 =========================
 
 With a bit of effort, one can use Golden Sequences to generate spacefilling quasirandom sequences of cartesian indices.
-For example `GoldenCartesianSequence((m, n))` will create a 2D Cartesian sequence corresponding to (approximate) samples of the Golden sequence in `1:m` x `1:n`. If `m, n` are coprime, the sequence will be space filling, that is `sort(collect(take(GoldenCartesianSequence((m, n)), m*n))) == CartesianIndices((m, n))[:]`.
+For example `GoldenCartesianSequence((m[1], m[2]))` will create a 2D Cartesian sequence corresponding to (approximate) samples of the Golden sequence in `1:m[1]` x `1:m[2]`. 
 
-If additional there are integers `a, b` such that `a/m ≈ ϕ[2]^(-1)`, `b/n ≈ ϕ[2]^(-2)` etc., then the indices will be well distributed, for example if `m, n = 2819, 3508`:
+For that, `GoldenCartesianSequence((m[1], ..., m[d]))` will create full period linear congruential generators (LCG) `x[i+1] = (x[i] + c[k]) % m[k]` approximating `phi[d]^[-k]` by `c[k]/m[k]` such that `c[k]` and `m[k]` are coprime.
+
+If `m[1], ..., m[d]` are coprime themselves, these `LCG` will have together period `prod(m)` and the sequence will be space filling, that is `sort(collect(take(GoldenCartesianSequence(m), prod(m)))) == CartesianIndices(m)[:]`.
+
+This means that if `m[k]` is the denominator of a good rational approximation `c[k]//m[k] ≈ ϕ[d]^(-k)`, then the indices will be well distributed even for large `i`. 
+
+For example if `m = (2819, 3508)`:
 
 ![Quasi-random cartesian indices](https://raw.githubusercontent.com/mschauer/GoldenSequences.jl/master/cartesian2.png)
 
 The image shows the fraction of the first 0.00005 (red) and the first 0.002 indices (black) in the `GoldenCartesianSequence((2819, 3508))`.
 
+In short, good `m` are denominators of fractions given by the function `rationalize`
+
+```julia
+d = 2
+m = @. denominator(rationalize(GoldenSequences.phis[d]^(-(1:d)), tol=0.0000001))
+```
+
+```
+2-element Array{Int64,1}:
+ 2819
+ 3508
+```
 
 Interface
 =========
