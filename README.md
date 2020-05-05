@@ -5,7 +5,7 @@ of Quasirandom Sequences](http://extremelearning.com.au/unreasonable-effectivene
 
 The `d`-dimensional sequence follows
 ```
-x[i] = x[i-1] .+ z .% true, x[0] = x0
+x[i] = (x[i-1] .+ z) .% true, x[0] = x0
 ```
 where
 ```
