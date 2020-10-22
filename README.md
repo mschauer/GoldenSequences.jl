@@ -110,7 +110,11 @@ julia> gcd(m[1], m[2])
 1
 ```
 
-
+There are some connections here to Knuth's multiplicative hashing method
+```julia
+hash(i) = mod(i*2654435769, 2^32)
+```
+where `2654435769` is approximately `2^32*ϕ`.
 
 Interface
 =========
