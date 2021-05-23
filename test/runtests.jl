@@ -7,6 +7,13 @@ using Random
 using Base.MathConstants
 min_dist(x) = minimum(norm(x[i] .- x[j]) for (i,j) in product(eachindex(x), eachindex(x)) if i != j)
 
+@testset "traits" begin
+    @test eltype(GoldenSequence(3)) === Tuple{Float64, Float64, Float64}
+    for g in [GoldenSequence(3), GoldenIntSequence(UInt, 3), GoldenCartesianSequence((13,14))]
+        @test eltype(g) == eltype(collect(take(g, 3)))
+    end
+end
+
 Random.seed!(1)
 for d in 1:6
     @testset "dim d=$d" begin
@@ -14,6 +21,7 @@ for d in 1:6
         xrand = [ntuple(d) do i rand() end for i in 1:n]
         xgolden = collect(take(GoldenSequence(d), n))
         @test all(isa.(xgolden, Ref(eltype(GoldenSequence(d)))))
+        @test eltype(xgolden) == eltype(GoldenSequence(d))
         xgolden_ = reshape(reinterpret(Float64, xgolden), (d, n))
         xrand_ = reshape(reinterpret(Float64, xrand), (d, n))
 

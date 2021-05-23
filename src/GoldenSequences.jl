@@ -35,16 +35,16 @@ struct GoldenSequence{T}
 	coeff::T
 end
 Iterators.eltype(::Type{GoldenSequence{T}}) where {T} = T
-Iterators.IteratorEltype(::GoldenSequence) = Base.HasEltype()
-
-Iterators.IteratorSize(::GoldenSequence) = Iterators.IsInfinite()
+Iterators.IteratorEltype(::Type{GoldenSequence{T}}) where {T} = Base.HasEltype()
+Iterators.IteratorSize(::Type{GoldenSequence{T}}) where {T} = Iterators.IsInfinite()
 
 struct GoldenIntSequence{T}
 	x0::T
 	coeff::T
 end
 Iterators.eltype(::Type{GoldenIntSequence{T}}) where {T} = T
-Iterators.IteratorSize(::GoldenIntSequence) = Iterators.IsInfinite()
+Iterators.IteratorEltype(::Type{GoldenIntSequence{T}}) where {T} = Base.HasEltype()
+Iterators.IteratorSize(::Type{GoldenIntSequence{T}}) where {T} = Iterators.IsInfinite()
 
 f(x, d) = x^(d+1) - (x + one(x))
 
@@ -61,8 +61,9 @@ struct GoldenCartesianSequence{T,S}
 	coeff::T
 	R::CartesianIndices{S}
 end
-Iterators.eltype(::Type{GoldenCartesianSequence{T}}) where {T} = T
-Iterators.IteratorSize(::GoldenCartesianSequence) = Iterators.IsInfinite()
+Iterators.eltype(::Type{GoldenCartesianSequence{T,S}}) where {T,S} = T
+Iterators.IteratorSize(::Type{GoldenCartesianSequence{T,S}}) where {T,S} = Iterators.IsInfinite()
+Iterators.IteratorEltype(::Type{GoldenCartesianSequence{T,S}}) where {T,S} = Base.HasEltype()
 
 
 """
@@ -112,7 +113,7 @@ function GoldenIntSequence(::Type{T}, n) where {T<:Unsigned}
 	t = ntuple(n) do i
 	       (round(T, (typemax(T)+1.0)*phi^(-i)))
 	end
-	GoldenIntSequence{typeof(t)}(t)
+	GoldenIntSequence{typeof(t)}(zero.(t), t)
 end
 
 GoldenCartesianSequence(R) = GoldenCartesianSequence(CartesianIndices(R))
