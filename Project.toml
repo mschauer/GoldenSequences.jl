@@ -1,7 +1,7 @@
 name = "GoldenSequences"
 uuid = "e13314f6-e9b3-11e9-0763-f13dff015e8a"
 authors = ["mschauer <moritzschauer@web.de>"]
-version = "0.2.1"
+version = "0.2.2"
 
 [deps]
 FixedPointNumbers = "53c48c17-4a7d-5ca2-90c5-79b7896eea93"
@@ -10,7 +10,7 @@ Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
 
 [compat]
 FixedPointNumbers = "0.8"
-Roots = "1.0"
+Roots = "1, 2"
 julia = "1"
 
 [extras]
